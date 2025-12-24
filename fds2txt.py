@@ -23,7 +23,7 @@ def process_time_point(t, job_id, output_dir='output'):
         'timeStarting': f'{t:0.1f}',
         'timeEnding': f'{t + 0.1:0.1f}',
         'variablesToRead': 1,
-        'indexForVariables': 3,  # Slice axis: 1=y，2=x，3=z
+        'indexForVariables': 1,  # Slice axis: 1=y，2=x，3=z
         'fileName': f'{output_dir}/u-{t:0.1f}-{t+0.1:0.1f}.txt'
     }
 

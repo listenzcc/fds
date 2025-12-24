@@ -25,7 +25,8 @@ def read_file(path: Path):
 
 
 def draw_frame(t_val, df_t, i, v_min, v_max, X, Y, ratio, temp_dir):
-    fig, ax = plt.subplots(figsize=(10, 10/ratio))
+    width = 5  # inches
+    fig, ax = plt.subplots(figsize=(width, width/ratio))
 
     # 插值
     points = df_t[['x', 'y']].values
@@ -71,7 +72,8 @@ if __name__ == '__main__':
 
     # 只在主进程中读取一次数据
     print("Reading data in main process...")
-    dfs = [read_file(e) for e in Path('./output').iterdir()]
+    dfs = [read_file(e)
+           for e in tqdm(Path('./output').iterdir(), 'Read txt files')]
     df = pd.concat(dfs)
     df = df[df['v'] != 0]
     print(f"Data loaded: {len(df)} rows")
@@ -81,7 +83,8 @@ if __name__ == '__main__':
     print(f"Time points: {len(times)}")
 
     # 将数据按时间分割，这样每个子进程只需处理自己的部分
-    df_by_time = {t: df[df['t'] == t] for t in times}
+    df_by_time = {t: df[df['t'] == t]
+                  for t in tqdm(times, 'Preparing data by time')}
 
     x_range = (df['x'].min(), df['x'].max())
     y_range = (df['y'].min(), df['y'].max())
