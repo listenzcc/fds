@@ -1,24 +1,37 @@
 # file: runme.ps1
 
+param(
+    [Parameter(Mandatory=$true)]
+    [string]$folder,
+
+    [Parameter(Mandatory=$true)]
+    [string]$filename
+)
+
+$cwd = Get-Location
+
+mkdir $folder -ErrorAction SilentlyContinue
+cp $filename $folder/
+
 # Start time
 $date = Get-Date
 Write-Host "Simulation started at: $date"
 
-cd sample
+cd $folder
 
-../fds_local.bat sample.fds
+fds_local.bat $filename
 
 $t1 = (Get-Date) - $date
 
-python ../fds2txt.py
+python $cwd/fds2txt.py
 
 $t2 = (Get-Date) - $date
 
-python ../txt2gif.py
+python $cwd/txt2gif.py
 
 $t3 = (Get-Date) - $date
 
-cd ..
+cd $cwd
 
 # End time, with time consuming
 $cost = (Get-Date) - $date
